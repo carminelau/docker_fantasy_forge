@@ -282,7 +282,7 @@
             const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
             function loadVideos(page) {
-                fetch(`http://0.0.0.0:5000/videos?page=${page}`)
+                fetch(`http://fantasyforge:5000/videos?page=${page}`)
                     .then(response => response.json())
                     .then(data => {
                         const videoGallery = document.getElementById('video-gallery');
@@ -297,7 +297,7 @@
                             const col = document.createElement('div');
                             col.className = 'col-md-4 video-container';
                             col.innerHTML = `
-                                <video loop autoplay muted data-src="http://0.0.0.0:5000/video?file_name=${video.filename}">
+                                <video loop autoplay muted data-src="http://fantasyforge:5000/video?file_name=${video.filename}">
                                     <source type="video/mp4">
                                     Your browser does not support the video tag.
                                 </video>
@@ -335,7 +335,7 @@
             }
 
             function loadPagination() {
-                fetch('http://0.0.0.0:5000/get_number_of_pages')
+                fetch('http://fantasyforge:5000/get_number_of_pages')
                     .then(response => response.json())
                     .then(data => {
                         const pagination = document.getElementById('pagination');
