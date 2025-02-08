@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fantasy Forge</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #8B0000;
+            /* Dark red */
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        h1 {
+            font-weight: bold;
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        @media (min-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        .header-button {
+            font-size: 0.8rem;
+            padding: 0.3rem 0.5rem;
+            margin: 0.2rem;
+            border-radius: 5px;
+        }
+
+        @media (min-width: 768px) {
+            .header-button {
+                font-size: 1rem;
+                padding: 0.5rem 1rem;
+                margin: 0.5rem;
+            }
+        }
+
+        .dropdown-menu {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .dropdown-item {
+            white-space: normal;
+        }
+
+        @media (max-width: 576px) {
+            .header-button {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.4rem;
+                margin: 0.1rem;
+            }
+
+            .dropdown-menu {
+                font-size: 0.9rem;
+            }
+        }
+
+        .container h2 {
+            color: #343a40;
+            font-weight: bold;
+        }
+
+        .video-container {
+            position: relative;
+            padding: 15px;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(73, 0, 0, 0.2);
+        }
+
+        .video-title {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(73, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            font-size: 0.9rem;
+        }
+
+        .video-container:hover .video-title {
+            opacity: 1;
+        }
+
+        @media (min-width: 768px) {
+            .video-title {
+                font-size: 1rem;
+            }
+        }
+
+        .pagination {
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .page-item.active .page-link {
+            background-color: #8B0000;
+            /* Dark red */
+            border-color: #8B0000;
+            color: white;
+        }
+
+        .page-link {
+            color: #8B0000;
+            /* Dark red */
+        }
+
+        .page-link:hover {
+            color: #8B0000;
+            /* Dark red */
+        }
+
+        .favorite-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px;
+            margin: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            color: #8B0000;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .favorite-button:hover {
+            opacity: 1;
+        }
+
+        @media (max-width: 576px) {
+            .favorite-button {
+                font-size: 18px;
+                top: 5px;
+                right: 5px;
+            }
+
+            .video-container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-4 text-left">
+                    <h1>Fantasy Forge</h1>
+                </div>
+                <div class="col-4 text-center">
+                    <h1>Catalogo</h1>
+                </div>
+                <div class="col-4 text-right">
+                    <div class="dropdown">
+                        <button class="btn btn-outline-light header-button" id="reset-favorites"
+                            onclick=reset_function()>Reset
+                            Preferiti</button>
+                        <button class="btn btn-outline-light dropdown-toggle header-button" type="button"
+                            id="favoritesDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Preferiti
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="favoritesDropdown">
+                            <div class="d-flex justify-content-between align-items-center p-2">
+                                <div id="favorite-videos">
+                                    <!-- Favorite videos will be listed here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="row" id="video-gallery">
+            <!-- Video elements will be inserted here -->
+        </div>
+        <nav>
+            <ul class="pagination" id="pagination">
+                <!-- Page numbers will be inserted here -->
+            </ul>
+        </nav>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+        integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+        crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+    <script>
+
+        //all'avvio della pagina controlla se ci sono preferiti salvati nel local storage
+        //se ci sono li carica
+        //altrimenti inizializza un set vuoto 
+
+        function capitalizeFirstLetter(string) {
+            if (!string) return ''; // Handle empty or undefined string
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        function reset_function() {
+            localStorage.removeItem('favorites');
+            location.reload();
+        }
+
+        function lazyLoadVideo(videoElement, filename) {
+            console.log("lazy load video", filename);
+            const localVideo = localStorage.getItem(filename);
+
+            if (localVideo) {
+                // Se il video è già nel localStorage, lo carica direttamente
+                videoElement.querySelector('source').src = localVideo;
+                videoElement.load();
+            } else {
+                // Se il video non è nel localStorage, lo scarica e lo salva
+                fetch(videoElement.dataset.src)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.blob();
+                    })
+                    .then(blob => {
+                        const objectURL = URL.createObjectURL(blob);
+                        videoElement.querySelector('source').src = objectURL;
+                        videoElement.load();
+
+                        // Salva il video nel localStorage
+                        const reader = new FileReader();
+                        reader.onloadend = function () {
+                            try {
+                                localStorage.setItem(filename, reader.result);
+                            } catch (e) {
+                                console.error("Error saving video to localStorage:", e);
+                            }
+                        };
+                        reader.readAsDataURL(blob);
+                    })
+                    .catch(error => {
+                        console.error("Failed to fetch video:", error);
+                        // Qui puoi gestire l'errore in modo appropriato, ad esempio mostrando un messaggio all'utente
+                    });
+            }
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+            function loadVideos(page) {
+                fetch(`https://catalogo.adivo.it/videos?page=${page}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const videoGallery = document.getElementById('video-gallery');
+                        videoGallery.innerHTML = ''; // Clear previous videos
+                        data.videos.forEach(video => {
+                            let nam = "";
+                            if (video.filename.includes("char")) {
+                                nam = capitalizeFirstLetter(video.filename.split('_char')[0]);
+                            } else if (video.filename.includes("video")) {
+                                nam = capitalizeFirstLetter(video.filename.split('_video')[0]);
+                            }
+                            const col = document.createElement('div');
+                            col.className = 'col-md-4 video-container';
+                            col.innerHTML = `
+                                <video loop autoplay muted data-src="https://catalogo.adivo.it/video?file_name=${video.filename}">
+                                    <source type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                                <button class="favorite-button" id="fav_${video.filename}" data-filename="${video.filename}">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                                <div class="video-title">${nam}</div>
+                            `;
+                            videoGallery.appendChild(col);
+
+                            const videoElement = col.querySelector('video');
+                            videoElement.playbackRate = 0.6; // Set playback rate to 0.7 speed
+
+                            // Lazy load the videos
+                            const observer = new IntersectionObserver((entries, observer) => {
+                                entries.forEach(entry => {
+                                    if (entry.isIntersecting) {
+                                        lazyLoadVideo(entry.target, video.filename);
+                                        observer.unobserve(entry.target);
+                                    }
+                                });
+                            });
+                            observer.observe(videoElement);
+
+                            // Add event listener for favorite button
+                            const favoriteButton = col.querySelector('.favorite-button');
+                            favoriteButton.addEventListener('click', function () {
+                                toggleFavorite(video.filename, favoriteButton);
+                            });
+                        });
+                    });
+                setTimeout(() => {
+                    updateFavoriteList();
+                }, 2000);
+            }
+
+            function loadPagination() {
+                fetch('https://catalogo.adivo.it/get_number_of_pages')
+                    .then(response => response.json())
+                    .then(data => {
+                        const pagination = document.getElementById('pagination');
+                        pagination.innerHTML = ''; // Clear previous pagination
+                        for (let i = 1; i <= data.number_of_pages; i++) {
+                            const li = document.createElement('li');
+                            li.className = 'page-item';
+                            li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+                            li.addEventListener('click', function (e) {
+                                e.preventDefault();
+                                loadVideos(i);
+                                setActivePage(i);
+                            });
+                            pagination.appendChild(li);
+                        }
+                        setActivePage(1);
+                    });
+            }
+
+            function setActivePage(page) {
+                const paginationItems = document.querySelectorAll('.pagination .page-item');
+                paginationItems.forEach((item, index) => {
+                    if (index + 1 === page) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+            }
+
+            function toggleFavorite(filename, button) {
+                if (favorites.indexOf(filename) !== -1) {
+                    favorites.splice(favorites.indexOf(filename), 1);
+                    button.querySelector('i').classList.replace('fas', 'far'); // Change to empty heart
+                    // Rimuovi il video dalla lista dei preferiti se è già presente nel local storage
+                    const favs = JSON.parse(localStorage.getItem('favorites')) || [];
+                    const index = favs.indexOf(filename);
+                    if (index > -1) {
+                        favs.splice(index, 1);
+                    }
+                    localStorage.setItem('favorites', JSON.stringify(favs));
+                } else {
+                    favorites.push(filename);
+                    button.querySelector('i').classList.replace('far', 'fas'); // Change to filled heart
+
+                    // Aggiungi il video alla lista dei preferiti se non è già presente nel local storage
+                    const favs = JSON.parse(localStorage.getItem('favorites')) || [];
+                    if (!favs.includes(filename)) {
+                        favs.push(filename);
+                    }
+                    localStorage.setItem('favorites', JSON.stringify(favs));
+                }
+                updateFavoriteList();
+            }
+
+            function showVideoPreview(filename) {
+                const videoPreview = document.getElementById('video-preview');
+                videoPreview.src = `http://188.166.97.4:5000/video?file_name=${filename}`;
+                videoPreview.play();
+            }
+
+            function updateFavoriteList() {
+                //controlla se ci sono preferiti salvati nel local storage
+                //se ci sono li carica
+                //altrimenti inizializza un set vuoto
+                const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+                if (favorites.length === 0) {
+                    return;
+                }
+
+                const favoriteList = document.getElementById('favorite-videos');
+                favoriteList.innerHTML = ''; // Clear the list
+                favorites.forEach(filename => {
+                    const div = document.createElement('div');
+                    div.className = 'dropdown-item';
+                    div.textContent = capitalizeFirstLetter(filename.split('_char')[0]);
+
+                    // Aggiungi l'event listener per mostrare la preview del video
+                    div.addEventListener('click', () => showVideoPreview(filename));
+
+                    favoriteList.appendChild(div);
+
+                    // cambia l'icona del cuore in pieno
+                    const id = "fav_" + filename;
+                    console.log(id);
+                    if (!document.getElementById(id)) return
+                    const button = document.getElementById(id);
+                    button.querySelector('i').classList.replace('far', 'fas');
+
+
+                    // save favorites to local storage
+                    localStorage.setItem('favorites', JSON.stringify(Array.from(favorites)));
+                });
+
+                // Aggiungi un bottone per andare alla pagina /preferiti
+                const div = document.createElement('div');
+                div.className = 'dropdown-item';
+                div.textContent = 'Vai ai Preferiti';
+                // mettere il colore rosso al testo
+                div.style.color = '#8B0000';
+                div.style.fontWeight = 'bold';
+                div.addEventListener('click', () => window.location.href = '/preferiti');
+                favoriteList.appendChild(div);
+
+            }
+
+
+
+            // Load initial videos and pagination
+
+            loadPagination();
+            loadVideos(1);
+            updateFavoriteList();
+
+            //iniziare a caricare la prossima pagina quando si è a metà della pagina corrente
+            window.addEventListener('scroll', function () {
+                if (window.scrollY + window.innerHeight >= document.body.scrollHeight / 2) {
+                    const paginationItems = document.querySelectorAll('.pagination .page-item');
+                    const lastPage = paginationItems[paginationItems.length - 1];
+                    const nextPage = parseInt(lastPage.querySelector('.page-link').textContent) + 1;
+                    if (nextPage <= paginationItems.length) {
+                        return;
+                    }
+                    // utilizza il prefetching per caricare la prossima pagina
+                    fetch(`http://188.166.97.4:5000/videos?page=${page}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const videoGallery = document.getElementById('video-gallery');
+                            videoGallery.innerHTML = ''; // Clear previous videos
+                            data.videos.forEach(video => {
+                                let nam = "";
+                                if (video.filename.includes("char")) {
+                                    nam = capitalizeFirstLetter(video.filename.split('_char')[0]);
+                                } else if (video.filename.includes("video")) {
+                                    nam = capitalizeFirstLetter(video.filename.split('_video')[0]);
+                                }
+                                const col = document.createElement('div');
+                                col.className = 'col-md-4 video-container';
+                                col.innerHTML = `
+                                <video loop autoplay muted data-src="http://188.166.97.4:5000/video?file_name=${video.filename}">
+                                    <source type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                                <button class="favorite-button" id="fav_${video.filename}" data-filename="${video.filename}">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                                <div class="video-title">${nam}</div>
+                            `;
+
+                                videoGallery.appendChild(col);
+
+                                const videoElement = col.querySelector('video');
+
+                                // Lazy load the videos
+                                const observer = new IntersectionObserver((entries, observer) => {
+                                    entries.forEach(entry => {
+                                        if (entry.isIntersecting) {
+                                            lazyLoadVideo(entry.target);
+                                            observer.unobserve(entry.target);
+                                        }
+                                    });
+                                });
+
+                                observer.observe(videoElement);
+
+                                // Add event listener for favorite button
+                                const favoriteButton = col.querySelector('.favorite-button');
+                                favoriteButton.addEventListener('click', function () {
+                                    toggleFavorite(video.filename, favoriteButton);
+                                });
+                            });
+                        });
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
