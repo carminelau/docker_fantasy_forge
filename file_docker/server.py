@@ -13,7 +13,10 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Connetti a MongoDB
-client = MongoClient('mongodb://127.0.0.1:27017')
+try:
+    client = MongoClient('mongodb://mongodb:27017')
+except:
+    client = MongoClient('mongodb://127.0.0.1:27017')
 #stampare i database presenti
 print(client.list_database_names())
 db = client['CatalogoFantasyForge']
