@@ -24,17 +24,28 @@ fs = gridfs.GridFS(db)
 
 # Configurazione per paginazione
 ITEMS_PER_PAGE = 9
+ITEMS_PER_IFRAME = 6
 
 @app.route("/get_number_of_pages", methods=['GET'])
 def get_number_of_pages():
-    video_files = list(fs.find({'filename': {'$regex': r'\.mp4$'}}))
-    return jsonify({'number_of_pages': (len(video_files) + ITEMS_PER_PAGE - 1) // ITEMS_PER_PAGE})
+    if request.args.get('iframe'):
+        video_files = list(fs.find({'filename': {'$regex': r'\.mp4$'}}))
+        return jsonify({'number_of_pages': (len(video_files) + ITEMS_PER_IFRAME - 1) // ITEMS_PER_IFRAME})
+    else:
+        video_files = list(fs.find({'filename': {'$regex': r'\.mp4$'}}))
+        return jsonify({'number_of_pages': (len(video_files) + ITEMS_PER_PAGE - 1) // ITEMS_PER_PAGE})
 
 @app.route('/videos', methods=['GET'])
 def list_videos():
-    page = int(request.args.get('page', 1))
-    skip = (page - 1) * ITEMS_PER_PAGE
-    video_files = fs.find({'filename': {'$regex': r'\.mp4$'}}).skip(skip).limit(ITEMS_PER_PAGE)
+    if request.args.get('iframe'):
+        page = int(request.args.get('page', 1))
+        skip = (page - 1) * ITEMS_PER_IFRAME
+        video_files = fs.find({'filename': {'$regex': r'\.mp4$'}}).skip(skip).limit(ITEMS_PER_IFRAME)
+    
+    else:
+        page = int(request.args.get('page', 1))
+        skip = (page - 1) * ITEMS_PER_PAGE
+        video_files = fs.find({'filename': {'$regex': r'\.mp4$'}}).skip(skip).limit(ITEMS_PER_PAGE)
     
     videos = []
     for video_file in video_files:
@@ -59,7 +70,10 @@ def get_video():
 
 @app.route('/')
 def home():
-    return render_template('pagina.html')
+    #se ci sta il parametro iframe ritorna pagina_aiframe.html
+    if request.args.get('iframe'):
+        return render_template('pagina_aiframe.html')
+    return render_template('pagina_full.html')
 
 # creare una route per prelevare i file stl dal database
 @app.route('/stl', methods=['GET'])
