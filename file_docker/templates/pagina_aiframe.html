@@ -251,7 +251,7 @@
             const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
             function loadVideos(page) {
-                fetch(`https://ai.sensesquare.eu/fantasyforge/videos?page=${page}`)
+                fetch(`https://ai.sensesquare.eu/fantasyforge/videos?page=${page}&iframe=true`)
                     .then(response => response.json())
                     .then(data => {
                         const videoGallery = document.getElementById('video-gallery');
@@ -266,7 +266,7 @@
                             const col = document.createElement('div');
                             col.className = 'col-md-4 video-container';
                             col.innerHTML = `
-                                <video loop autoplay muted data-src="https://ai.sensesquare.eu/fantasyforge/video?file_name=${video.filename}">
+                                <video loop autoplay muted data-src="https://ai.sensesquare.eu/fantasyforge/video?file_name=${video.filename}&iframe=true">
                                     <source type="video/mp4">
                                     Your browser does not support the video tag.
                                 </video>
@@ -304,7 +304,7 @@
             }
 
             function loadPagination() {
-                fetch('https://ai.sensesquare.eu/fantasyforge/get_number_of_pages')
+                fetch('https://ai.sensesquare.eu/fantasyforge/get_number_of_pages&iframe=true')
                     .then(response => response.json())
                     .then(data => {
                         const pagination = document.getElementById('pagination');
@@ -362,7 +362,7 @@
 
             function showVideoPreview(filename) {
                 const videoPreview = document.getElementById('video-preview');
-                videoPreview.src = `https://ai.sensesquare.eu/fantasyforge/video?file_name=${filename}`;
+                videoPreview.src = `https://ai.sensesquare.eu/fantasyforge/video?file_name=${filename}&iframe=true`;
                 videoPreview.play();
             }
 
@@ -430,7 +430,7 @@
                         return;
                     }
                     // utilizza il prefetching per caricare la prossima pagina
-                    fetch(`https://ai.sensesquare.eu/fantasyforge/videos?page=${page}`)
+                    fetch(`https://ai.sensesquare.eu/fantasyforge/videos?page=${page}&iframe=true`)
                         .then(response => response.json())
                         .then(data => {
                             const videoGallery = document.getElementById('video-gallery');
@@ -445,7 +445,7 @@
                                 const col = document.createElement('div');
                                 col.className = 'col-md-4 video-container';
                                 col.innerHTML = `
-                                <video loop autoplay muted data-src="https://ai.sensesquare.eu/fantasyforge/video?file_name=${video.filename}">
+                                <video loop autoplay muted data-src="https://ai.sensesquare.eu/fantasyforge/video?file_name=${video.filename}&iframe=true">
                                     <source type="video/mp4">
                                     Your browser does not support the video tag.
                                 </video>
