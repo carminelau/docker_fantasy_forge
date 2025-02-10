@@ -304,7 +304,7 @@
             }
 
             function loadPagination() {
-                fetch('https://ai.sensesquare.eu/fantasyforge/get_number_of_pages&iframe=true')
+                fetch('https://ai.sensesquare.eu/fantasyforge/get_number_of_pages?iframe=true')
                     .then(response => response.json())
                     .then(data => {
                         const pagination = document.getElementById('pagination');
