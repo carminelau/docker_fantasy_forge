@@ -258,11 +258,7 @@
                         videoGallery.innerHTML = ''; // Clear previous videos
                         data.videos.forEach(video => {
                             let nam = "";
-                            if (video.filename.includes("char")) {
-                                nam = capitalizeFirstLetter(video.filename.split('_char')[0]);
-                            } else if (video.filename.includes("video")) {
-                                nam = capitalizeFirstLetter(video.filename.split('_video')[0]);
-                            }
+                            nam = video.filename.split('.mp4')[0];
                             const col = document.createElement('div');
                             col.className = 'col-md-4 video-container';
                             col.innerHTML = `
